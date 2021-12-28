@@ -5,6 +5,9 @@ import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import TodoList from './components/TodoList';
 import Spinner from 'react-bootstrap/Spinner'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
+
 
 function App() {
   const { loading, error, data } = useQuery(ALL_TODO)
@@ -19,10 +22,23 @@ function App() {
 
 
   return (
-    <div>
-      <Container fluid="md" style={{ width: '30rem' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
+
+      <Container fluid="md" style={{ width: '40rem' }}>
         <Row>
-          <h1>Todo Items {' '}<Button variant="primary">Add Task</Button></h1>
+          <Col>
+            <Card.Header style={{ display: 'flex' }}>
+              <div style={{fontWeight: 'bolder'}}>
+                Todo Items
+              </div>
+              <div style={{ marginLeft: 'auto' }}>
+                <Button variant="primary">Add Task</Button>
+              </div>
+            </Card.Header>
+
+          </Col>
+        </Row>
+        <Row>
           <TodoList data={data} />
         </Row>
       </Container>
