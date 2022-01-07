@@ -10,9 +10,9 @@ function PopUpModal({ show, todo, handleClose }) {
           <Modal.Title>{todo.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>{todo.description} at
-            {todo.date} 
-            by {todo.time}</p>
+          <p>{todo.description} </p>
+            <span>Date: {todo.date} </span>
+            <blockquote>Time: {todo.time}</blockquote>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
