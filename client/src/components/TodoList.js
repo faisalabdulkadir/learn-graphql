@@ -4,19 +4,28 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import PopUpModal from './PopUpModal'
+import EditPage from './EditPage'
 
 function TodoList({ todoList }) {
   const [show, setShow] = useState(false);
   const [todo, setTodo] = useState({})
+  const [showForm, setShowForm] = useState(false)
+  const [editTodo, setEditTodo] = useState({})
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true)
+  const handleFormClose = () => setShowForm(false);
+  const handleFormShow = () => setShowForm(true)
 
 
   const handleViewItem = (item) => {
-    setTodo(item)
     handleShow()
+    setTodo(item)
+  }
 
+  const handleEditItem = (item) => {
+    handleFormShow()
+    setEditTodo(item)
   }
 
   return (
@@ -32,7 +41,12 @@ function TodoList({ todoList }) {
                     {todo.title}
                   </div>
                   <div style={{ marginLeft: 'auto' }}>
-                    <Button variant="outline-primary">Edit</Button>{' '}
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => handleEditItem(todo)}
+                    >
+                      Edit
+                    </Button>{' '}
                     <Button
                       onClick={() => handleViewItem(todo)}
                       variant="outline-success"
@@ -51,6 +65,11 @@ function TodoList({ todoList }) {
           handleShow={handleShow}
           handleClose={handleClose}
           todo={todo}
+        />
+        <EditPage
+          show={showForm}
+          handleClose={handleFormClose}
+          todo={editTodo}
         />
       </Col>
     </>
