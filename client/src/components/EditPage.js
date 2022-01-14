@@ -7,7 +7,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import { UPDATE_TODO } from '../GraphQL/Mutations'
 import { ALL_TODO } from '../GraphQL/Queries'
 
-function EditPage({ todo, show, handleClose }) {
+function EditPage({ todo, showForm, handleClose, showAddForm, handleAddFormClose }) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [time, setTime] = useState('')
@@ -50,11 +50,20 @@ function EditPage({ todo, show, handleClose }) {
     handleClose()
   }
 
+  const handleAdd = () => {
+console.log('adding task')
+  }
+
   return (
     <div>
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+        show={todo.id ? showForm : showAddForm}
+        onHide={todo.id ? handleClose : handleAddFormClose}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Tasks</Modal.Title>
+          <Modal.Title>
+            {todo.id ? 'Edit Tasks' : 'Create Task'}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -97,12 +106,21 @@ function EditPage({ todo, show, handleClose }) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            variant="secondary"
+            onClick={todo.id ? handleClose : handleAddFormClose}
+          >
             Close
           </Button>
-          <Button variant="primary" onClick={handleEdit}>
-            Update Changes
-          </Button>
+          {todo.id ? (
+            <Button variant="primary" onClick={handleEdit}>
+              Update Task
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={handleAdd}>
+              Add Task
+            </Button>
+          )}
           {/* <Button variant="primary" onClick={handleClose}>
             Save Changes
           </Button> */}
