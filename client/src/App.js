@@ -13,6 +13,10 @@ import Col from 'react-bootstrap/Col'
 function App() {
   const { loading, error, data } = useQuery(ALL_TODO)
   const [todoList, setTodoList] = useState([])
+  const [showAddForm, setShowAddForm] = useState(false)
+
+  const handleAddFormShow = () => setShowAddForm(true)
+  const handleAddFormClose = () => setShowAddForm(false);
 
   useEffect(() => {
     if (data) {
@@ -28,7 +32,9 @@ function App() {
   );
   if (error) return `Error! ${error.message}`;
 
-
+  const handleAddForm = () => {
+    handleAddFormShow()
+  }
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
 
@@ -40,14 +46,21 @@ function App() {
                 Todo Items
               </div>
               <div style={{ marginLeft: 'auto' }}>
-                <Button variant="primary">Add Task</Button>
+                <Button
+                  onClick={handleAddForm}
+                  variant="primary">Add Task</Button>
               </div>
             </Card.Header>
 
           </Col>
         </Row>
         <Row>
-          <TodoList todoList={todoList} />
+          <TodoList
+            todoList={todoList}
+            showAddForm={showAddForm}
+            handleAddFormClose={handleAddFormClose}
+
+          />
         </Row>
       </Container>
 
