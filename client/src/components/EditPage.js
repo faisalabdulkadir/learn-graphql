@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Spinner from 'react-bootstrap/Spinner'
-import { UPDATE_TODO } from '../GraphQL/Mutations'
+import { UPDATE_TODO, CREATE_TODO } from '../GraphQL/Mutations'
 import { ALL_TODO } from '../GraphQL/Queries'
 
 function EditPage({ todo, showForm, handleClose, showAddForm, handleAddFormClose }) {
@@ -13,7 +13,11 @@ function EditPage({ todo, showForm, handleClose, showAddForm, handleAddFormClose
   const [time, setTime] = useState('')
   const [date, setDate] = useState('')
 
-  const [updateTodo, { data, loading, error }] = useMutation(UPDATE_TODO, {
+  const [updateTodo, { loading: isUpdatedLoad, error: updateError }] = useMutation(UPDATE_TODO, {
+    refetchQueries: [{ query: ALL_TODO }]
+  })
+
+  const [createTodo, { loading: isAddedLoad, error: addedError }] = useMutation(CREATE_TODO, {
     refetchQueries: [{ query: ALL_TODO }]
   })
 
@@ -25,12 +29,19 @@ function EditPage({ todo, showForm, handleClose, showAddForm, handleAddFormClose
 
   }, [todo.title, todo.description, todo.time, todo.date])
 
-  if (loading) return (
+  if (isUpdatedLoad) return (
     <Spinner animation="border" role="status">
       <span className="visually-hidden">Loading...</span>
     </Spinner>
   );
-  if (error) return `Error! ${error.message}`;
+  if (updateError) return `Error! ${updateError.message}`;
+
+  if (isAddedLoad) return (
+    <Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner>
+  );
+  if (addedError) return `Error! ${addedError.message}`;
 
   const handleEdit = () => {
     onsubmit = (e) => {
@@ -51,7 +62,24 @@ function EditPage({ todo, showForm, handleClose, showAddForm, handleAddFormClose
   }
 
   const handleAdd = () => {
-console.log('adding task')
+    onsubmit = (e) => {
+      e.preventDefault()
+    }
+    createTodo({
+      variables: {
+        todoData: {
+          title: title,
+          description: description,
+          time: time,
+          date: date
+        }
+      }
+    })
+    setTitle('')
+    setDescription('')
+    setTime('')
+    setDate('')
+    handleAddFormClose()
   }
 
   return (
@@ -117,7 +145,7 @@ console.log('adding task')
               Update Task
             </Button>
           ) : (
-            <Button variant="primary" onClick={handleAdd}>
+            <Button type='submit' variant="primary" onClick={handleAdd}>
               Add Task
             </Button>
           )}
