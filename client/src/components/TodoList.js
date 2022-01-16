@@ -6,7 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import PopUpModal from './PopUpModal'
 import EditPage from './EditPage'
 
-function TodoList({ todoList }) {
+function TodoList({ todoList, showAddForm, handleAddFormClose }) {
   const [show, setShow] = useState(false);
   const [todo, setTodo] = useState({})
   const [showForm, setShowForm] = useState(false)
@@ -14,8 +14,12 @@ function TodoList({ todoList }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true)
-  const handleFormClose = () => setShowForm(false);
   const handleFormShow = () => setShowForm(true)
+  const handleFormClose = () => {
+    setShowForm(false)
+    setEditTodo({})
+  };
+
 
 
   const handleViewItem = (item) => {
@@ -67,9 +71,11 @@ function TodoList({ todoList }) {
           todo={todo}
         />
         <EditPage
-          show={showForm}
+          showForm={showForm}
           handleClose={handleFormClose}
           todo={editTodo}
+          showAddForm={showAddForm}
+          handleAddFormClose={handleAddFormClose}
         />
       </Col>
     </>

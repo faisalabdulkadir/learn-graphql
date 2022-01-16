@@ -16,7 +16,7 @@ class TodoInput(graphene.InputObjectType):
     date = graphene.Date()
 
 
-class TodoMutation(graphene.Mutation):
+class UpdateTodoMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
         todo_data = TodoInput(required=True)
@@ -35,11 +35,30 @@ class TodoMutation(graphene.Mutation):
             todo.date = todo_data.date
         todo.save()
 
-        return TodoMutation(todo=todo)
+        return UpdateTodoMutation(todo=todo)
+
+
+class CreateTodoMutation(graphene.Mutation):
+    class Arguments:
+        todo_data = TodoInput(required=True)
+
+    todo = graphene.Field(TodoType)
+
+    @classmethod
+    def mutate(cls, root, info, todo_data):
+        todo = Todo(
+            title=todo_data.title,
+            description=todo_data.description,
+            time=todo_data.time,
+            date=todo_data.date
+        )
+        todo.save()
+        return CreateTodoMutation(todo=todo)
 
 
 class Mutation(graphene.ObjectType):
-    update_todo = TodoMutation.Field()
+    update_todo = UpdateTodoMutation.Field()
+    create_todo = CreateTodoMutation.Field()
 
 
 class Query(graphene.ObjectType):

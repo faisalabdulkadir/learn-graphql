@@ -13,3 +13,17 @@ mutation UpdateTodo($id: ID, $todoData: TodoInput!) {
     }
   }  
 `
+
+export const CREATE_TODO = gql`
+mutation CreateTodo($todoData: TodoInput!) {
+  createTodo(todoData: $todoData) {
+    todo {
+      id
+      title
+      time
+      description
+      date
+    }
+  }
+}
+`

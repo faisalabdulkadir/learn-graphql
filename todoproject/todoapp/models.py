@@ -9,5 +9,8 @@ class Todo(models.Model):
     time = models.TimeField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
-        return self.title
+        return str(self.title)
